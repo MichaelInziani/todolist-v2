@@ -4,6 +4,10 @@
     <h1> <%= listTitle %> </h1>
   </div>
 
+ <% const onSubmit = async(event)=>{ %>
+       <% event.preventDefault(); %>
+   <% } %>
+
   <div class="box">
 
 
@@ -20,8 +24,10 @@
 
 
       <form class="item" action="/" method="post">
-        <input type="text" name="newItem" placeholder="New Item" required autocomplete="off">
-        <button type="submit" name="list" value="<%= listTitle %>">+</button>
+        <input type="text" name="newItem" placeholder="New Item" required autocomplete="off" >
+        <button type="submit" name="list" value="<%= listTitle %>"
+        <% onClick={onSubmit} %>
+        >+</button>
       </form>
   </div>
 
