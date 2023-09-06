@@ -71,12 +71,16 @@ app.get("/", function (req, res) {
                     });
                 res.redirect("/");
             } else res.render("list", { listTitle: "Today", newListItems: foundItems });
-            foundItems.preventDefault();
         })
         .catch(function (err) {
             console.log(err);
         });
 });
+
+function postItem(event){
+    //Preventing page refresh
+   event.preventDefault();
+}
 
 app.post("/", function (req, res) {
 
@@ -97,6 +101,7 @@ app.post("/", function (req, res) {
 
     if (listName === "Today") {
         item.save()
+        postItem();
         res.redirect("/")
     } else {
 
