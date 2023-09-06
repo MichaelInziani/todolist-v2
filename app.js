@@ -1,11 +1,12 @@
-
-const express = require("express");
-const bodyParser = require("body-parser");
-const mongoose = require("mongoose");
+import 'dotenv/config'
+import express from 'express';
+import bodyParser from 'body-parser';
+import mongoose from 'mongoose';
 //const date = require(__dirname + "/date.js");
-const _ = require("lodash");
+import _ from 'lodash';
 
 const app = express();
+const PORT = process.env.PORT || 3000;
 
 app.set('view engine', 'ejs');
 
@@ -13,7 +14,15 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 //CONNECTING 
-mongoose.connect('mongodb+srv://MichaelInziani:HyperText1205Lang!&@cluster0.mxdjmpr.mongodb.net/todolistDB');
+const connectDB = async () => {
+    try {
+        const conn = await mongoose.connect(process.env.MONGO_URI);
+        console.log(`MongoDB Connected: ${conn.connection.host}`);
+    } catch (error) {
+        console.log(error);
+        process.exit(1);
+    }
+}
 
 //CREATING SCHEMA
 const { Schema } = mongoose;
@@ -170,10 +179,16 @@ app.get("/:customListName", function (req, res) {
 
 });
 
-let port = process.env.PORT;
-if (port == null || port == "") {
-    port = 3000;
-}
-app.listen(port , function() {
-  console.log("Server started on port 3000");
-});
+connectDB().then(() => {
+    app.listen(PORT, () => {
+        console.log("listening for requests");
+    })
+})
+
+//let port = process.env.PORT;
+//if (port == null || port == "") {
+//    port = 3000;
+//}
+//app.listen(port , function() {
+ // console.log("Server started on port 3000");
+//});
