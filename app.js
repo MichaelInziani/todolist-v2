@@ -14,11 +14,11 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
 //CONNECTING 
-const connectDB = async (event) => {
+const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI);
         console.log(`MongoDB Connected: ${conn.connection.host}`);
-        event.preventDefault();
+        
     } catch (error) {
         console.log(error);
         process.exit(1);
