@@ -78,10 +78,7 @@ app.get("/", function (req, res) {
 });
 
 app.post("/", function (req, res) {
-    
-function postItem(event){
-     event.preventDefault();
-   } 
+
     const itemName = req.body.newItem;
     const listName = req.body.list;
 
@@ -99,7 +96,6 @@ function postItem(event){
 
     if (listName === "Today") {
         item.save()
-        postItem(event);
         res.redirect("/")
     } else {
 
