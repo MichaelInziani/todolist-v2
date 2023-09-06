@@ -77,12 +77,11 @@ app.get("/", function (req, res) {
         });
 });
 
+app.post("/", function (req, res) {
+    
 function postItem(event){
      event.preventDefault();
    } 
-
-app.post("/", function (req, res) {
-
     const itemName = req.body.newItem;
     const listName = req.body.list;
 
