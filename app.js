@@ -71,7 +71,7 @@ app.get("/", function (req, res) {
                     });
                 res.redirect("/");
             } else res.render("list", { listTitle: "Today", newListItems: foundItems });
-            preventDefault();
+            foundItems.preventDefault();
         })
         .catch(function (err) {
             console.log(err);
