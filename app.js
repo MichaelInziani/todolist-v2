@@ -102,6 +102,16 @@ app.post("/",function(req, res) {
             console.log(err);
         });
     }
+
+    //else{
+     //   List.findOneAndUpdate({name:listName})
+      //  .then(
+       //     {$push: {items: item}},
+       // res.redirect("/"+listName)
+      //  ).catch(err => {
+      //      console.log(err);
+      //  });
+   // }
 });
 
 //Delete an item
