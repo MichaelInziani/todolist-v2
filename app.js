@@ -133,7 +133,7 @@ app.post("/delete", async function (req, res) {
 //Custom list route
 app.get("/:customListName", function (req, res) {
     const customListName = _.capitalize(req.params.customListName);
-  if (customListName === "Favicon.ico") return;
+  //if (customListName === "Favicon.ico") return;
 
     List.findOne({ name: customListName })
         .then(function (foundList) {
