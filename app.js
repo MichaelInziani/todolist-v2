@@ -2,7 +2,7 @@ import 'dotenv/config'
 import express from 'express';
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
-//const date = require(__dirname + "/date.js");
+import date from "./date.js";
 import _ from 'lodash';
 
 const app = express();
@@ -50,33 +50,33 @@ const item3 = new Item({
 //STORING ITEMS INTO AN ARRAY
 const defaultItems = [item1, item2, item3];
 
-//LOGGING ITEMS IN GITBASH
+//CREATING A SCHEMA FOR LIST ITEMS
+const listSchema = {
+    name: String,
+    items: [itemsSchema]
+}
 
-//const items = ["Buy Food", "Cook Food", "Eat Food"];
-//const workItems = [];
+//CREATING A MODEL FOR LIST ITEMS
+const List = mongoose.model("List", listSchema);
 
-app.get("/", function (req, res) {
-
-    //const day = date.getDate();
-    Item.find({})
-        .then(function (foundItems) {
-            if (foundItems.length === 0) {
-                /** Insert Items 1,2 & 3 to todolistDB */
-                Item.insertMany(defaultItems)
-                    .then(function (result) {
-                        console.log("Sucessfully Added Default Items to DB.");
-                    })
-                    .catch(function (err) {
-                        console.log(err);
-                    });
-                res.redirect("/");
-            } else res.render("list", { listTitle: "Today", newListItems: foundItems });
-        })
-        .catch(function (err) {
-            console.log(err);
-        });
+//Rendering the home page
+app.get("/", async function (req, res) {
+  try {
+    const foundItems = await Item.find({});
+    if (foundItems.length === 0) {
+      await Item.insertMany(defaultItems);
+      console.log("Successfully saved default items to DB");
+      res.redirect("/");
+    } else {
+      res.render("list", { listTitle: date(), newListItems: foundItems });
+    }
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("Internal Server Error");
+  }
 });
 
+//Post a new item
 app.post("/", function (req, res) {
 
     const itemName = req.body.newItem;
@@ -84,19 +84,12 @@ app.post("/", function (req, res) {
 
     const item = new Item({
         name: itemName
-    })
-   
-    //if (req.body.list === "Work") {
-    //  workItems.push(item);
-    //   res.redirect("/work");
-    // } else {
-    //  items.push(item);
-    //   res.redirect("/");
-    // }
+    });
 
-    if (listName === "Today") {
+    if (listName === date()) {
         item.save()
         res.redirect("/")
+       
     } else {
 
          List.findOne({ name: listName }).exec().then(foundList => {
@@ -118,7 +111,7 @@ app.post("/delete", async function (req, res) {
 
     // If the list name is "Today", remove the item from the database and redirect to the home page.
     // Otherwise, find the corresponding list in the database and remove the item from it.
-    if (listName === "Today") {
+    if (listName === date()) {
         if (checkedItemId != undefined) {
             await Item.findByIdAndRemove(checkedItemId);
             console.log(`Deleted ${checkedItemId} Successfully`);
@@ -142,14 +135,7 @@ app.post("/delete", async function (req, res) {
  // res.render("about");
 //});
 
-//CREATING A SCHEMA FOR LIST ITEMS
-const listSchema = {
-    name: String,
-    items: [itemsSchema]
-}
 
-//CREATING A MODEL FOR LIST ITEMS
-const List = mongoose.model("List", listSchema);
 app.get("/:customListName", function (req, res) {
     const customListName = _.capitalize(req.params.customListName);
 
