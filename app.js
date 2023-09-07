@@ -106,7 +106,7 @@ app.post("/",function(req, res) {
 
 //Delete an item
 app.post("/delete", async function (req, res) {
-    const checkedItemId = req.body.checkbox;
+     const checkedItemID = new mongoose.mongo.ObjectID(req.body.checkbox);
     const listName = req.body.listName;
 
     // Print the name of the list to the console for debugging purposes.
