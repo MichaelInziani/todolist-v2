@@ -79,7 +79,7 @@ app.get("/", async function (req, res) {
 });
 
 //Post a new item
-app.post("/", function (req, res) {
+app.post("/",function(req, res) {
 
     const itemName = req.body.newItem;
     const listName = req.body.list;
@@ -94,7 +94,7 @@ app.post("/", function (req, res) {
        
     } else {
 
-         List.findOne({ name: listName }).exec().then(foundList => {
+         List.findOneAndUpdate({ name: listName }).exec().then(foundList => {
             foundList.items.push(item)
             foundList.save()
             res.redirect("/" + listName)
