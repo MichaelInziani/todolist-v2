@@ -127,14 +127,6 @@ app.post("/delete", async function (req, res) {
     }
 });
 
-//app.get("/work", function(req,res){
- // res.render("list", {listTitle: "Work List", newListItems: workItems});
-//});
-
-   // app.get("/about", function (req, res) {
- // res.render("about");
-//});
-
 
 app.get("/:customListName", function (req, res) {
     const customListName = _.capitalize(req.params.customListName);
@@ -168,13 +160,5 @@ app.get("/:customListName", function (req, res) {
 connectDB().then(() => {
     app.listen(PORT, () => {
         console.log("listening for requests");
-    })
-})
-
-//let port = process.env.PORT;
-//if (port == null || port == "") {
-//    port = 3000;
-//}
-//app.listen(port , function() {
- // console.log("Server started on port 3000");
-//});
+    });
+});
