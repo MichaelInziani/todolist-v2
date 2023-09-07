@@ -13,7 +13,7 @@ app.set('view engine', 'ejs');
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(express.static("public"));
 
-//CONNECTING 
+//Connect to MongoDB
 const connectDB = async () => {
     try {
         const conn = await mongoose.connect(process.env.MONGO_URI);
@@ -26,17 +26,17 @@ const connectDB = async () => {
     }
 }
 
-//CREATING SCHEMA
+//Create an item Schema
 const { Schema } = mongoose;
 
 const itemsSchema = new Schema({
     name: String,
 });
 
-//CREATING THE MODEL
+//Create a model for the Schema
 const Item = mongoose.model('Item', itemsSchema);
 
-//CREATE A DOCUMENT/NEW ITEMS
+//Create a document for new items
 const item1 = new Item({
     name: "Read."
 });
@@ -49,19 +49,19 @@ const item3 = new Item({
     name: "Material research."
 });
 
-//STORING ITEMS INTO AN ARRAY
+//Store Items in an array
 const defaultItems = [item1, item2, item3];
 
-//CREATING A SCHEMA FOR LIST ITEMS
+//Create a schema for list items
 const listSchema = {
     name: String,
     items: [itemsSchema]
 }
 
-//CREATING A MODEL FOR LIST ITEMS
+//Create a model for the list items
 const List = mongoose.model("List", listSchema);
 
-//Rendering the home page
+//Render the homepage with the default items
 app.get("/", async function (req, res) {
   try {
     const foundItems = await Item.find({});
@@ -104,6 +104,7 @@ app.post("/", function (req, res) {
     }
 });
 
+//Delete an item
 app.post("/delete", async function (req, res) {
     const checkedItemId = req.body.checkbox;
     const listName = req.body.listName;
@@ -111,7 +112,7 @@ app.post("/delete", async function (req, res) {
     // Print the name of the list to the console for debugging purposes.
     console.log("the list name is: " + listName);
 
-    // If the list name is "Today", remove the item from the database and redirect to the home page.
+    // If the list name is === date(), remove the item from the database and redirect to the home page.
     // Otherwise, find the corresponding list in the database and remove the item from it.
     if (listName === date()) {
         if (checkedItemId != undefined) {
@@ -129,7 +130,7 @@ app.post("/delete", async function (req, res) {
     }
 });
 
-
+//Custom list route
 app.get("/:customListName", function (req, res) {
     const customListName = _.capitalize(req.params.customListName);
 
@@ -158,6 +159,11 @@ app.get("/:customListName", function (req, res) {
         });
 
 });
+
+//The about page
+//app.get("/about", function (req, res) {
+ // res.render("about");
+//});
 
 connectDB().then(() => {
     app.listen(PORT, () => {
