@@ -3,7 +3,9 @@
     "",
     "\\public",
     "\\public\\css",
-    "\\views"
+    "\\views",
+    "\\views\\partials"
   ],
+  "SelectedNode": "\\app.js",
   "PreviewInSolutionExplorer": false
 }
